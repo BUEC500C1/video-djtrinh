@@ -31,4 +31,5 @@ jobs:
       run: |
         pip install pytest
         #pytest twitter_api_test.py
+        chmod +x ./ffmpeg/bin/ffmpeg.exe
         pytest main_test.py
