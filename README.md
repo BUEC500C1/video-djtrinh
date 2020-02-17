@@ -17,3 +17,9 @@ consumer_secret = ****
 access_token = ****
 access_secret = ****
 ```
+
+The following screenshots is the program in action and working:
+
+<img src="https://github.com/BUEC500C1/video-djtrinh/blob/master/cli_picture.PNG?raw=true">
+
+<img src="https://github.com/BUEC500C1/video-djtrinh/blob/master/Example.PNG?raw=true">
