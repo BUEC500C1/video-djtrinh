@@ -13,16 +13,14 @@ from PIL import Image, ImageDraw, ImageFont
 def processor(q, completion_queue):
     while (True):
         name = threading.currentThread().getName()
-        print("Thread: {0} start get item from queue[current size = {1}] at time = {2} \n".format(name, q.qsize(),
-                                                                                            time.strftime('%H:%M:%S')))
+        print("Thread: {0} start get item from queue[current size = {1}] at time = {2} \n".format(
+            name, q.qsize(), time.strftime('%H:%M:%S')))
         item = q.get()
         time.sleep(.001)
         create_images(item[0], item[1], item[2], item[3])
         print("The item is %s" % item[3])
-        print("Thread: {0} finish process item from queue[current size = {1}] at time = {2} \n".format(name, q.qsize(),
-                                                                                                 time.strftime(
-
-                                                                                                     '%H:%M:%S')))
+        print("Thread: {0} finish process item from queue[current size = {1}] at time = {2} \n".format(
+            name, q.qsize(), time.strftime('%H:%M:%S')))
         completion_queue.put(1)
         if completion_queue.qsize() == 20:
             ffmpeg_call()
@@ -35,13 +33,11 @@ def producer(q, q_item):
     # the main thread will put new items to the queue
     for count, tweet in enumerate(q_item[2]):
         name = threading.currentThread().getName()
-        print("Thread: {0} start put item into queue[current size = {1}] at time = {2} \n".format(name, q.qsize(),
-                                                                                            time.strftime('%H:%M:%S')))
-        item = "item-" + str(i)
+        print("Thread: {0} start put item into queue[current size = {1}] at time = {2} \n".format(
+            name, q.qsize(),time.strftime('%H:%M:%S')))
         q.put([q_item[0], q_item[1], tweet, count])
-        print("Thread: {0} successfully put item into queue[current size = {1}] at time = {2} \n".format(name, q.qsize(),
-                                                                                                   time.strftime(
-                                                                                                       '%H:%M:%S')))
+        print("Thread: {0} successfully put item into queue[current size = {1}] at time = {2} \n".format(
+            name, q.qsize(),time.strftime('%H:%M:%S')))
     q.join()
 
 
@@ -78,7 +74,6 @@ def create_images(user_id, user_img_url, tweet, count):
         print(e)
     background.paste(img, offset)
     background.save(r'processed_imgs/'+'img'+str(count)+'.png')
-
 
 
 def ffmpeg_call():
