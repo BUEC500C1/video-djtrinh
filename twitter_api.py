@@ -17,16 +17,22 @@ class twitter_scrapper():
 
 
     def get_user_pic(self, username):
-        u = self.api.get_user(username)
-        return u.profile_image_url_https
+        try:
+            u = self.api.get_user(username)
+            return u.profile_image_url_https
+        except tweepy.error.TweepError:
+            return ""
 
 
     def get_users_tweets(self, username):
-        tweets = self.api.user_timeline(screen_name=username, count=20, include_rts=True, result_type="recent",
-                                   include_entities=True,
-                                   tweet_mode='extended',
-                                   lang="en")
-        return tweets
+        try:
+            tweets = self.api.user_timeline(screen_name=username, count=20, include_rts=True, result_type="recent",
+                                    include_entities=True,
+                                    tweet_mode='extended',
+                                    lang="en")
+            return tweets
+        except tweepy.error.TweepError:
+            return ""
 
 
     def search_twitter(self, username, product):
