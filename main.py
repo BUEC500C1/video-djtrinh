@@ -19,7 +19,6 @@ def processor(q, completion_queue):
         time.sleep(.001)
         create_images(item[0], item[1], item[2], item[3])
         print("The item is %s" % item[3])
-        #time.sleep(.001)  # .001 seconds to process information
         print("Thread: {0} finish process item from queue[current size = {1}] at time = {2} \n".format(name, q.qsize(),
                                                                                                  time.strftime(
 
@@ -48,15 +47,15 @@ def producer(q, q_item):
 
 def create_images(user_id, user_img_url, tweet, count):
     try:
-        tweet = tweet.retweeted_status.full_text
+        txt = tweet.retweeted_status.full_text
     except AttributeError:  # Not a Retweet
-        tweet = tweet.full_text
+        txt = tweet.full_text
     font = ImageFont.truetype('font\Arial.ttf', 14)
     background = Image.new('RGBA', (1024, 768), (255, 255, 255, 255))
     response = requests.get(user_img_url)
     img = Image.open(BytesIO(response.content))
     draw = ImageDraw.Draw(background)
-    lines = textwrap.wrap(tweet, width=120)
+    lines = textwrap.wrap(txt, width=120)
     x, y = 50, 225
     for line in lines:
         width, height = font.getsize(line)
@@ -64,8 +63,20 @@ def create_images(user_id, user_img_url, tweet, count):
         y += 15
     draw.text((120, 170), user_id, font=font, fill="black")
     offset = (50, 150)
+    img_list = []
+    try:
+        if 'media' in tweet.entities:
+            for medium in tweet.entities['media']:
+                img_list.append(medium['media_url'])
+        if len(img_list) != 0:
+            response = requests.get(img_list[0])
+            img = Image.open(BytesIO(response.content))
+            background.paste(img, (100, y))
+    except Exception as e:
+        print(e)
     background.paste(img, offset)
     background.save('processed_imgs\/'+'img'+str(count)+'.png')
+
 
 
 def ffmpeg_call():
