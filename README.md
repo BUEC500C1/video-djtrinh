@@ -2,7 +2,10 @@
 
 ### Introduction
 In this project, we will be creating a multi-threaded application that picks the top 20 tweets from a Twitter handle and makes a 30 sec video out of it.
-Every three seconds, the top tweet will be shown along with their profile picture and username.
+Every three seconds, the top tweet will be shown along with their profile picture and username. Currently, the application is a single
+process running with 4 threads. The output format is a 1024x768 resolustion mp4 file running at 25 frames per second. Each of the 4
+threads is responding for image processing, specifically creating the backgroud, drawing the username, user picture and writing the
+tweet for all twenty images.
 
 ### How to Run?
 This application requires primarily Tweepy, Python 3, and other packages specified in the requirements.txt file.
