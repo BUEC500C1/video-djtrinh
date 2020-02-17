@@ -50,7 +50,9 @@ def create_images(user_id, user_img_url, tweet, count):
         txt = tweet.retweeted_status.full_text
     except AttributeError:  # Not a Retweet
         txt = tweet.full_text
-    font = ImageFont.truetype('font\Arial.ttf', 14)
+    finally:
+        return
+    font = ImageFont.truetype(r'font/Arial.ttf', 14)
     background = Image.new('RGBA', (1024, 768), (255, 255, 255, 255))
     response = requests.get(user_img_url)
     img = Image.open(BytesIO(response.content))
@@ -75,13 +77,13 @@ def create_images(user_id, user_img_url, tweet, count):
     except Exception as e:
         print(e)
     background.paste(img, offset)
-    background.save('processed_imgs\/'+'img'+str(count)+'.png')
+    background.save(r'processed_imgs/'+'img'+str(count)+'.png')
 
 
 
 def ffmpeg_call():
     today = str(datetime.date.today()).replace('-', '_')
-    subprocess.call(['ffmpeg\/bin\/ffmpeg', '-y', '-framerate', '1/3', '-i', 'processed_imgs\img%d.png', '-r', '25', '-pix_fmt', 'yuv420p', 'twitter_feed_'+today+'.mp4'])
+    subprocess.call([r'ffmpeg/bin/ffmpeg', '-y', '-framerate', '1/3', '-i', r'processed_imgs/img%d.png', '-r', '25', '-pix_fmt', 'yuv420p', 'twitter_feed_'+today+'.mp4'])
 
 
 if __name__ == '__main__':

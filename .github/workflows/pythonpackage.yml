@@ -31,3 +31,4 @@ jobs:
       run: |
         pip install pytest
         #pytest twitter_api_test.py
+        pytest main_test.py
