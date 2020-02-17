@@ -83,7 +83,7 @@ def create_images(user_id, user_img_url, tweet, count):
 
 def ffmpeg_call():
     today = str(datetime.date.today()).replace('-', '_')
-    subprocess.call([r'ffmpeg/bin/ffmpeg', '-y', '-framerate', '1/3', '-i', r'processed_imgs/img%d.png', '-r', '25', '-pix_fmt', 'yuv420p', 'twitter_feed_'+today+'.mp4'])
+    subprocess.call([r'./ffmpeg/bin/ffmpeg.exe', '-y', '-framerate', '1/3', '-i', r'processed_imgs/img%d.png', '-r', '25', '-pix_fmt', 'yuv420p', 'twitter_feed_'+today+'.mp4'])
 
 
 if __name__ == '__main__':
