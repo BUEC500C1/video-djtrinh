@@ -34,10 +34,10 @@ def producer(q, q_item):
     for count, tweet in enumerate(q_item[2]):
         name = threading.currentThread().getName()
         print("Thread: {0} start put item into queue[current size = {1}] at time = {2} \n".format(
-            name, q.qsize(),time.strftime('%H:%M:%S')))
+            name, q.qsize(), time.strftime('%H:%M:%S')))
         q.put([q_item[0], q_item[1], tweet, count])
         print("Thread: {0} successfully put item into queue[current size = {1}] at time = {2} \n".format(
-            name, q.qsize(),time.strftime('%H:%M:%S')))
+            name, q.qsize(), time.strftime('%H:%M:%S')))
     q.join()
 
 
@@ -78,7 +78,8 @@ def create_images(user_id, user_img_url, tweet, count):
 
 def ffmpeg_call():
     today = str(datetime.date.today()).replace('-', '_')
-    subprocess.call([r'./ffmpeg/bin/ffmpeg.exe', '-y', '-framerate', '1/3', '-i', r'processed_imgs/img%d.png', '-r', '25', '-pix_fmt', 'yuv420p', 'twitter_feed_'+today+'.mp4'])
+    subprocess.call([r'./ffmpeg/bin/ffmpeg.exe', '-y', '-framerate', '1/3', '-i', r'processed_imgs/img%d.png',
+                     '-r', '25', '-pix_fmt', 'yuv420p', 'twitter_feed_'+today+'.mp4'])
 
 
 if __name__ == '__main__':
