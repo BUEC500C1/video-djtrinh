@@ -6,39 +6,36 @@ import twitter_api as twit
 import subprocess
 import datetime
 import textwrap
+import glob
+import os, os.path
 from io import BytesIO
 from PIL import Image, ImageDraw, ImageFont
 
 
-def processor(q, completion_queue):
+def processor(q, q2):
     while (True):
-        name = threading.currentThread().getName()
-        print("Thread: {0} start get item from queue[current size = {1}] at time = {2} \n".format(
-            name, q.qsize(), time.strftime('%H:%M:%S')))
         item = q.get()
         time.sleep(.001)
         create_images(item[0], item[1], item[2], item[3])
-        print("The item is %s" % item[3])
-        print("Thread: {0} finish process item from queue[current size = {1}] at time = {2} \n".format(
-            name, q.qsize(), time.strftime('%H:%M:%S')))
-        completion_queue.put(1)
-        if completion_queue.qsize() == 20:
-            ffmpeg_call()
-            while(completion_queue.qsize() != 0):
-                completion_queue.get()
         q.task_done()
+
+
+def ffpmeg_processor(q2):
+    while (True):
+        username = q2.get()
+        png_count = len(glob.glob1(r"processed_imgs/", username + r"*.png"))
+        if png_count == 20:
+            q2.put(username)
+            q2.join()
+        time.sleep(.001)
+        ffmpeg_call(username)
+        q2.task_done()
 
 
 def producer(q, q_item):
     # the main thread will put new items to the queue
     for count, tweet in enumerate(q_item[2]):
-        name = threading.currentThread().getName()
-        print("Thread: {0} start put item into queue[current size = {1}] at time = {2} \n".format(
-            name, q.qsize(), time.strftime('%H:%M:%S')))
         q.put([q_item[0], q_item[1], tweet, count])
-        print("Thread: {0} successfully put item into queue[current size = {1}] at time = {2} \n".format(
-            name, q.qsize(), time.strftime('%H:%M:%S')))
-    q.join()
 
 
 def create_images(user_id, user_img_url, tweet, count):
@@ -46,8 +43,7 @@ def create_images(user_id, user_img_url, tweet, count):
         txt = tweet.retweeted_status.full_text
     except AttributeError:  # Not a Retweet
         txt = tweet.full_text
-    finally:
-        return
+
     font = ImageFont.truetype(r'font/Arial.ttf', 14)
     background = Image.new('RGBA', (1024, 768), (255, 255, 255, 255))
     response = requests.get(user_img_url)
@@ -69,33 +65,53 @@ def create_images(user_id, user_img_url, tweet, count):
         if len(img_list) != 0:
             response = requests.get(img_list[0])
             img = Image.open(BytesIO(response.content))
-            background.paste(img, (100, y))
+            #background.paste(img, (100, y))
     except Exception as e:
         print(e)
     background.paste(img, offset)
-    background.save(r'processed_imgs/'+'img'+str(count)+'.png')
+    background.save('./processed_imgs/'+str(user_id)+str(count)+'.png')
 
 
-def ffmpeg_call():
+def ffmpeg_call(username):
     today = str(datetime.date.today()).replace('-', '_')
-    subprocess.call([r'./ffmpeg/bin/ffmpeg.exe', '-y', '-framerate', '1/3', '-i', r'processed_imgs/img%d.png',
-                     '-r', '25', '-pix_fmt', 'yuv420p', 'twitter_feed_'+today+'.mp4'])
+    subprocess.call([r'./ffmpeg/bin/ffmpeg.exe', '-hide_banner', '-loglevel', 'panic',
+                     '-y', '-framerate', '1/3', '-i', r'processed_imgs/'+username+'%d.png',
+                     '-r', '25', '-pix_fmt', 'yuv420p', 'twitter_feed_'+username+'_'+today+'.mp4'])
+    print("\nDone processing " + username + " video!")
+
+
+def cli(q, q2):
+    while(True):
+        id = input("Twitter id? ")
+        # Remove old pictures with matching Twitter ID
+        filelist = glob.glob(os.path.join(r'processed_imgs/', id + "*.png"))
+        for f in filelist:
+            os.remove(f)
+        # Create processes to start generating pictures
+        q_item = [id, twit.get_user_pic(id), twit.get_users_tweets(id)]
+        t = threading.Thread(name="ProducerThread", target=producer, args=(q, q_item))
+        q2.put(id)
+        t.start()
 
 
 if __name__ == '__main__':
+    # create queue
     q = queue.Queue(maxsize=4)
-    completion_queue = queue.Queue()
+    q2 = queue.Queue()
+
+    # grab keys
     twit = twit.twitter_scrapper("keys")
 
-    threads_num = 4  # 4 threads to do processes running at .001 seconds
+    # 4 threads to do processes running at .001 seconds
+    threads_num = 4
     for i in range(threads_num):
-        t = threading.Thread(name="Thread Processor-" + str(i), target=processor, args=(q,completion_queue))
+        t = threading.Thread(name="Thread Processor-" + str(i), target=processor, args=(q, q2,))
         t.start()
 
-    while(True):
-        id = input("Twitter id?")
-        q_item = [id, twit.get_user_pic(id), twit.get_users_tweets(id)]
+    # FFMPEG thread
+    t = threading.Thread(name="FFPMPEG Processor", target=ffpmeg_processor, args=(q2,))
+    t.start()
 
-        t = threading.Thread(name="ProducerThread", target=producer, args=(q, q_item))
-        t.start()
-        q.join()
+    # CLI thread
+    t = threading.Thread(name="CLI", target=cli, args=(q, q2,))
+    t.start()
