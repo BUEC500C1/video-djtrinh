@@ -1,5 +1,6 @@
 import twitter_api as twit
 
+
 def test_invalid_username():
     t = twit.twitter_scrapper("keys")
     assert t.get_user_pic("alksdhfaksdlfj") == ""
