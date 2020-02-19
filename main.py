@@ -72,7 +72,7 @@ def create_images(user_id, user_img_url, tweet, count):
         if len(img_list) != 0:
             response = requests.get(img_list[0])
             img = Image.open(BytesIO(response.content))
-            #background.paste(img, (100, y))
+            # background.paste(img, (100, y))
     except Exception as e:
         print(e)
     background.paste(img, offset)
@@ -81,11 +81,14 @@ def create_images(user_id, user_img_url, tweet, count):
 
 def ffmpeg_call(username):
     today = str(datetime.date.today()).replace('-', '_')
-    subprocess.call(['./ffmpeg/bin/ffmpeg', '-y', '-r', '1/3', '-i', './processed_imgs/'+username+'%d.png',
-                     '-pix_fmt', 'yuv420p', '-r', '25', '-loglevel', 'error', '-hide_banner',
-                     'twitter_feed_'+username+'_'+today+'.mp4'], stdout=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
-    print("Done with "+ username + " video!")
-    print("Twitter id? ", end='')
+    try:
+        subprocess.call(['./ffmpeg/bin/ffmpeg', '-y', '-r', '1/3', '-i', './processed_imgs/'+username+'%d.png',
+                       '-pix_fmt', 'yuv420p', '-r', '25', '-loglevel', 'error', '-hide_banner',
+                       'twitter_feed_' + username + '_' + today + '.mp4'], stdout = subprocess.DEVNULL, stdin = subprocess.DEVNULL)
+        print("Done with " + username + " video!")
+        print("Twitter id? ", end='')
+    except FileNotFoundError:
+        return -1
 
 
 def cli(q, q2):
@@ -96,8 +99,8 @@ def cli(q, q2):
         for f in filelist:
             try:
                 os.remove(f)
-            except:
-                print("No files")
+            except Exception as e:
+                print(e)
         # Create processes to start generating pictures
         q_item = [id, twit.get_user_pic(id), twit.get_users_tweets(id)]
         t = threading.Thread(name="ProducerThread", target=producer, args=(q, q_item))

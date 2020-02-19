@@ -6,4 +6,4 @@ def test_create():
 
 
 def test_ffmpeg_call():
-    assert main.ffmpeg_call("test") == None
+    assert main.ffmpeg_call("test") == -1
