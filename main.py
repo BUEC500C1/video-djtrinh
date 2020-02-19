@@ -94,18 +94,19 @@ def ffmpeg_call(username):
 def cli(q, q2):
     while(True):
         id = input("Twitter id? ")
-        # Remove old pictures with matching Twitter ID
-        filelist = glob.glob(os.path.join(r'processed_imgs/', id + "*.png"))
-        for f in filelist:
-            try:
-                os.remove(f)
-            except Exception as e:
-                print(e)
-        # Create processes to start generating pictures
-        q_item = [id, twit.get_user_pic(id), twit.get_users_tweets(id)]
-        t = threading.Thread(name="ProducerThread", target=producer, args=(q, q_item))
-        q2.put(id)
-        t.start()
+        if id != '':
+            # Remove old pictures with matching Twitter ID
+            filelist = glob.glob(os.path.join(r'processed_imgs/', id + "*.png"))
+            for f in filelist:
+                try:
+                    os.remove(f)
+                except Exception as e:
+                    print(e)
+            # Create processes to start generating pictures
+            q_item = [id, twit.get_user_pic(id), twit.get_users_tweets(id)]
+            t = threading.Thread(name="ProducerThread", target=producer, args=(q, q_item))
+            q2.put(id)
+            t.start()
 
 
 if __name__ == '__main__':
