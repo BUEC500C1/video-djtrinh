@@ -7,7 +7,8 @@ import subprocess
 import datetime
 import textwrap
 import glob
-import os, os.path
+import os
+import os.path
 from io import BytesIO
 from PIL import Image, ImageDraw, ImageFont
 
@@ -45,7 +46,10 @@ def create_images(user_id, user_img_url, tweet, count):
     try:
         txt = tweet.retweeted_status.full_text
     except AttributeError:  # Not a Retweet
-        txt = tweet.full_text
+        try:
+            txt = tweet.full_text
+        except AttributeError:
+            return
 
     font = ImageFont.truetype(r'font/Arial.ttf', 14)
     background = Image.new('RGBA', (1024, 768), (255, 255, 255, 255))

@@ -31,7 +31,7 @@ class twitter_scrapper():
             return ""
 
     def search_twitter(self, username, product):
-        filt='-filter:retweets'
+        filt = '-filter:retweets'
         tweet_list = []
 
         if(product != ""):
@@ -45,7 +45,7 @@ class twitter_scrapper():
                                        tweet_mode='extended',
                                        lang="en").items():
                 i = i + 1
-                                
+
                 tweet_proc = "".join(tweet.full_text.lower().split())
                 if(tweet_proc.find(
                         "".join(product.lower().split())) != -1):
@@ -77,7 +77,7 @@ class twitter_scrapper():
 
                 if i == 1500:
                     break
-                        
+
         return tweet_list
 
     def spam_checker(self, string):
