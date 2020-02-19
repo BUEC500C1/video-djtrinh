@@ -84,7 +84,7 @@ def ffmpeg_call(username):
     try:
         subprocess.call(['./ffmpeg/bin/ffmpeg', '-y', '-r', '1/3', '-i', './processed_imgs/'+username+'%d.png',
                        '-pix_fmt', 'yuv420p', '-r', '25', '-loglevel', 'error', '-hide_banner',
-                       'twitter_feed_' + username + '_' + today + '.mp4'], stdout = subprocess.DEVNULL, stdin = subprocess.DEVNULL)
+                       'twitter_feed_' + username + '_' + today + '.mp4'], stdout=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
         print("Done with " + username + " video!")
         print("Twitter id? ", end='')
     except FileNotFoundError:
