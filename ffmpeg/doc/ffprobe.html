@@ -10,7 +10,7 @@
 <meta name="description" content="ffprobe Documentation: ">
 <meta name="keywords" content="FFmpeg documentation : ffprobe ">
 <meta name="Generator" content="texi2html 5.0">
-<!-- Created on February 10, 2020 by texi2html 5.0 -->
+<!-- Created on January 26, 2020 by texi2html 5.0 -->
 <!--
 texi2html was written by: 
             Lionel Cons <Lionel.Cons@cern.ch> (original author)
@@ -387,12 +387,14 @@ state of <code>level</code> prefix flag or <var>loglevel</var>:
 <p>By default the program logs to stderr. If coloring is supported by the
 terminal, colors are used to mark errors and warnings. Log coloring
 can be disabled setting the environment variable
-<code>AV_LOG_FORCE_NOCOLOR</code>, or can be forced setting
+<code>AV_LOG_FORCE_NOCOLOR</code> or <code>NO_COLOR</code>, or can be forced setting
 the environment variable <code>AV_LOG_FORCE_COLOR</code>.
+The use of the environment variable <code>NO_COLOR</code> is deprecated and
+will be dropped in a future FFmpeg version.
 </p>
 </dd>
 <dt>&lsquo;<samp>-report</samp>&rsquo;</dt>
-<dd><p>Dump full command line and log output to a file named
+<dd><p>Dump full command line and console output to a file named
 <code><var>program</var>-<var>YYYYMMDD</var>-<var>HHMMSS</var>.log</code> in the current
 directory.
 This file can be useful for bug reports.

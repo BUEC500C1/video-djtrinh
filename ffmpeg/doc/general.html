@@ -10,7 +10,7 @@
 <meta name="description" content="General Documentation: ">
 <meta name="keywords" content="FFmpeg documentation : General ">
 <meta name="Generator" content="texi2html 5.0">
-<!-- Created on February 10, 2020 by texi2html 5.0 -->
+<!-- Created on January 26, 2020 by texi2html 5.0 -->
 <!--
 texi2html was written by: 
             Lionel Cons <Lionel.Cons@cern.ch> (original author)
@@ -60,15 +60,14 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
     </ul></li>
     <li><a name="toc-OpenH264" href="#OpenH264">1.16 OpenH264</a></li>
     <li><a name="toc-OpenJPEG" href="#OpenJPEG">1.17 OpenJPEG</a></li>
-    <li><a name="toc-rav1e" href="#rav1e">1.18 rav1e</a></li>
-    <li><a name="toc-TwoLAME" href="#TwoLAME">1.19 TwoLAME</a></li>
-    <li><a name="toc-VapourSynth" href="#VapourSynth">1.20 VapourSynth</a></li>
-    <li><a name="toc-WavPack" href="#WavPack">1.21 WavPack</a></li>
-    <li><a name="toc-x264" href="#x264">1.22 x264</a></li>
-    <li><a name="toc-x265" href="#x265">1.23 x265</a></li>
-    <li><a name="toc-xavs" href="#xavs">1.24 xavs</a></li>
-    <li><a name="toc-xavs2" href="#xavs2">1.25 xavs2</a></li>
-    <li><a name="toc-ZVBI" href="#ZVBI">1.26 ZVBI</a></li>
+    <li><a name="toc-TwoLAME" href="#TwoLAME">1.18 TwoLAME</a></li>
+    <li><a name="toc-VapourSynth" href="#VapourSynth">1.19 VapourSynth</a></li>
+    <li><a name="toc-WavPack" href="#WavPack">1.20 WavPack</a></li>
+    <li><a name="toc-x264" href="#x264">1.21 x264</a></li>
+    <li><a name="toc-x265" href="#x265">1.22 x265</a></li>
+    <li><a name="toc-xavs" href="#xavs">1.23 xavs</a></li>
+    <li><a name="toc-xavs2" href="#xavs2">1.24 xavs2</a></li>
+    <li><a name="toc-ZVBI" href="#ZVBI">1.25 ZVBI</a></li>
   </ul></li>
   <li><a name="toc-Supported-File-Formats_002c-Codecs-or-Features" href="#Supported-File-Formats_002c-Codecs-or-Features">2 Supported File Formats, Codecs or Features</a>
   <ul class="no-bullet">
@@ -107,25 +106,15 @@ enable it.
 <a name="AMD-AMF_002fVCE"></a>
 <h2 class="section"><a href="general.html#toc-AMD-AMF_002fVCE">1.2 AMD AMF/VCE</a></h2>
 
-<p>FFmpeg can use the AMD Advanced Media Framework library
-for accelerated H.264 and HEVC(only windows) encoding on hardware with Video Coding Engine (VCE).
+<p>FFmpeg can use the AMD Advanced Media Framework library under Windows
+for accelerated H.264 and HEVC encoding on hardware with Video Coding Engine (VCE).
 </p>
-<p>To enable support you must obtain the AMF framework header files(version 1.4.9+) from
+<p>To enable support you must obtain the AMF framework header files from
 <a href="https://github.com/GPUOpen-LibrariesAndSDKs/AMF.git">https://github.com/GPUOpen-LibrariesAndSDKs/AMF.git</a>.
 </p>
 <p>Create an <code>AMF/</code> directory in the system include path.
 Copy the contents of <code>AMF/amf/public/include/</code> into that directory.
 Then configure FFmpeg with <code>--enable-amf</code>.
-</p>
-<p>Initialization of amf encoder occurs in this order:
-1) trying to initialize through dx11(only windows)
-2) trying to initialize through dx9(only windows)
-3) trying to initialize through vulkan
-</p>
-<p>To use h.264(AMD VCE) encoder on linux amdgru-pro version 19.20+ and amf-amdgpu-pro
-package(amdgru-pro contains, but does not install automatically) are required.
-</p>
-<p>This driver can be installed using amdgpu-pro-install script in official amd driver archive.
 </p>
 <a name="AviSynth"></a>
 <h2 class="section"><a href="general.html#toc-AviSynth">1.3 AviSynth</a></h2>
@@ -347,16 +336,8 @@ testing and for taking advantage of Cisco&rsquo;s patent portfolio license
 instructions.  To enable using OpenJPEG in FFmpeg, pass <code>--enable-libopenjpeg</code> to
 &lsquo;<tt>./configure</tt>&rsquo;.
 </p>
-<a name="rav1e"></a>
-<h2 class="section"><a href="general.html#toc-rav1e">1.18 rav1e</a></h2>
-
-<p>FFmpeg can make use of rav1e (Rust AV1 Encoder) via its C bindings to encode videos.
-Go to <a href="https://github.com/xiph/rav1e/">https://github.com/xiph/rav1e/</a> and follow the instructions to build
-the C library. To enable using rav1e in FFmpeg, pass <code>--enable-librav1e</code>
-to &lsquo;<tt>./configure</tt>&rsquo;.
-</p>
 <a name="TwoLAME"></a>
-<h2 class="section"><a href="general.html#toc-TwoLAME">1.19 TwoLAME</a></h2>
+<h2 class="section"><a href="general.html#toc-TwoLAME">1.18 TwoLAME</a></h2>
 
 <p>FFmpeg can make use of the TwoLAME library for MP2 encoding.
 </p>
@@ -365,7 +346,7 @@ instructions for installing the library.
 Then pass <code>--enable-libtwolame</code> to configure to enable it.
 </p>
 <a name="VapourSynth"></a>
-<h2 class="section"><a href="general.html#toc-VapourSynth">1.20 VapourSynth</a></h2>
+<h2 class="section"><a href="general.html#toc-VapourSynth">1.19 VapourSynth</a></h2>
 
 <p>FFmpeg can read VapourSynth scripts as input. To enable support, pass
 <code>--enable-vapoursynth</code> to configure. Vapoursynth is detected via
@@ -377,7 +358,7 @@ be autodetected so the input format has to be forced. For ff* CLI tools,
 add <code>-f vapoursynth</code> before the input <code>-i yourscript.vpy</code>.
 </p>
 <a name="WavPack"></a>
-<h2 class="section"><a href="general.html#toc-WavPack">1.21 WavPack</a></h2>
+<h2 class="section"><a href="general.html#toc-WavPack">1.20 WavPack</a></h2>
 
 <p>FFmpeg can make use of the libwavpack library for WavPack encoding.
 </p>
@@ -386,7 +367,7 @@ installing the library. Then pass <code>--enable-libwavpack</code> to configure 
 enable it.
 </p>
 <a name="x264"></a>
-<h2 class="section"><a href="general.html#toc-x264">1.22 x264</a></h2>
+<h2 class="section"><a href="general.html#toc-x264">1.21 x264</a></h2>
 
 <p>FFmpeg can make use of the x264 library for H.264 encoding.
 </p>
@@ -400,7 +381,7 @@ configure to enable it.
 details), you must upgrade FFmpeg&rsquo;s license to GPL in order to use it.
 </p></div>
 <a name="x265"></a>
-<h2 class="section"><a href="general.html#toc-x265">1.23 x265</a></h2>
+<h2 class="section"><a href="general.html#toc-x265">1.22 x265</a></h2>
 
 <p>FFmpeg can make use of the x265 library for HEVC encoding.
 </p>
@@ -414,7 +395,7 @@ to enable it.
 details), you must upgrade FFmpeg&rsquo;s license to GPL in order to use it.
 </p></div>
 <a name="xavs"></a>
-<h2 class="section"><a href="general.html#toc-xavs">1.24 xavs</a></h2>
+<h2 class="section"><a href="general.html#toc-xavs">1.23 xavs</a></h2>
 
 <p>FFmpeg can make use of the xavs library for AVS encoding.
 </p>
@@ -423,7 +404,7 @@ installing the library. Then pass <code>--enable-libxavs</code> to configure to
 enable it.
 </p>
 <a name="xavs2"></a>
-<h2 class="section"><a href="general.html#toc-xavs2">1.25 xavs2</a></h2>
+<h2 class="section"><a href="general.html#toc-xavs2">1.24 xavs2</a></h2>
 
 <p>FFmpeg can make use of the xavs2 library for AVS2-P2/IEEE1857.4 video encoding.
 </p>
@@ -437,7 +418,7 @@ enable it.
 details), you must upgrade FFmpeg&rsquo;s license to GPL in order to use it.
 </p></div>
 <a name="ZVBI"></a>
-<h2 class="section"><a href="general.html#toc-ZVBI">1.26 ZVBI</a></h2>
+<h2 class="section"><a href="general.html#toc-ZVBI">1.25 ZVBI</a></h2>
 
 <p>ZVBI is a VBI decoding library which can be used by FFmpeg to decode DVB
 teletext pages and DVB teletext subtitles.
@@ -791,10 +772,9 @@ following image formats are supported:
 <tr><td width="40%">Auravision Aura 2</td><td width="10%"></td><td width="10%">X</td></tr>
 <tr><td width="40%">Autodesk Animator Flic video</td><td width="10%"></td><td width="10%">X</td></tr>
 <tr><td width="40%">Autodesk RLE</td><td width="10%"></td><td width="10%">X</td><td width="40%">fourcc: AASC</td></tr>
-<tr><td width="40%">AV1</td><td width="10%">E</td><td width="10%">E</td><td width="40%">Supported through external libraries libaom, libdav1d and librav1e</td></tr>
+<tr><td width="40%">AV1</td><td width="10%">E</td><td width="10%">E</td><td width="40%">Supported through external libraries libaom and libdav1d</td></tr>
 <tr><td width="40%">Avid 1:1 10-bit RGB Packer</td><td width="10%">X</td><td width="10%">X</td><td width="40%">fourcc: AVrp</td></tr>
 <tr><td width="40%">AVS (Audio Video Standard) video</td><td width="10%"></td><td width="10%">X</td><td width="40%">Video encoding used by the Creature Shock game.</td></tr>
-<tr><td width="40%">AVS2-P2/IEEE1857.4</td><td width="10%">E</td><td width="10%">E</td><td width="40%">Supported through external libraries libxavs2 and libdavs2</td></tr>
 <tr><td width="40%">AYUV</td><td width="10%">X</td><td width="10%">X</td><td width="40%">Microsoft uncompressed packed 4:4:4:4</td></tr>
 <tr><td width="40%">Beam Software VB</td><td width="10%"></td><td width="10%">X</td></tr>
 <tr><td width="40%">Bethesda VID video</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in some games from Bethesda Softworks.</td></tr>
@@ -973,10 +953,8 @@ following image formats are supported:
 <tr><td width="40%">AAC</td><td width="10%">EX</td><td width="10%">X</td><td width="40%">encoding supported through internal encoder and external library libfdk-aac</td></tr>
 <tr><td width="40%">AAC+</td><td width="10%">E</td><td width="10%">IX</td><td width="40%">encoding supported through external library libfdk-aac</td></tr>
 <tr><td width="40%">AC-3</td><td width="10%">IX</td><td width="10%">IX</td></tr>
-<tr><td width="40%">ACELP.KELVIN</td><td width="10%"></td><td width="10%">X</td></tr>
 <tr><td width="40%">ADPCM 4X Movie</td><td width="10%"></td><td width="10%">X</td></tr>
 <tr><td width="40%">APDCM Yamaha AICA</td><td width="10%"></td><td width="10%">X</td></tr>
-<tr><td width="40%">ADPCM Argonaut Games</td><td width="10%"></td><td width="10%">X</td></tr>
 <tr><td width="40%">ADPCM CDROM XA</td><td width="10%"></td><td width="10%">X</td></tr>
 <tr><td width="40%">ADPCM Creative Technology</td><td width="10%"></td><td width="10%">X</td><td width="40%">16 -&gt; 4, 8 -&gt; 4, 8 -&gt; 3, 8 -&gt; 2</td></tr>
 <tr><td width="40%">ADPCM Electronic Arts</td><td width="10%"></td><td width="10%">X</td><td width="40%">Used in various EA titles.</td></tr>
@@ -1204,7 +1182,6 @@ performance on systems without hardware floating point support).
 <tr><td width="40%">TCP</td><td width="10%">X</td></tr>
 <tr><td width="40%">TLS</td><td width="10%">X</td></tr>
 <tr><td width="40%">UDP</td><td width="10%">X</td></tr>
-<tr><td width="40%">ZMQ</td><td width="10%">E</td></tr>
 </table>
 
 <p><code>X</code> means that the protocol is supported.

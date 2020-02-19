@@ -12,23 +12,25 @@ from io import BytesIO
 from PIL import Image, ImageDraw, ImageFont
 
 
-def processor(q, q2):
+def processor(q):
     while (True):
         item = q.get()
-        time.sleep(.001)
-        create_images(item[0], item[1], item[2], item[3])
+        if item is not None:
+            create_images(item[0], item[1], item[2], item[3])
         q.task_done()
+        time.sleep(.001)
 
 
 def ffpmeg_processor(q2):
     while (True):
         username = q2.get()
-        png_count = len(glob.glob1(r"processed_imgs/", username + r"*.png"))
-        if png_count == 20:
-            q2.put(username)
-            q2.join()
+        if username is not None:
+            png_count = len(glob.glob1(r"processed_imgs/", username + r"*.png"))
+            if (png_count < 20):
+                q2.put(username)
+            else:
+                ffmpeg_call(username)
         time.sleep(.001)
-        ffmpeg_call(username)
         q2.task_done()
 
 
@@ -36,6 +38,7 @@ def producer(q, q_item):
     # the main thread will put new items to the queue
     for count, tweet in enumerate(q_item[2]):
         q.put([q_item[0], q_item[1], tweet, count])
+    q.join()
 
 
 def create_images(user_id, user_img_url, tweet, count):
@@ -74,10 +77,11 @@ def create_images(user_id, user_img_url, tweet, count):
 
 def ffmpeg_call(username):
     today = str(datetime.date.today()).replace('-', '_')
-    subprocess.call([r'./ffmpeg/bin/ffmpeg.exe', '-hide_banner', '-loglevel', 'panic',
-                     '-y', '-framerate', '1/3', '-i', r'processed_imgs/'+username+'%d.png',
-                     '-r', '25', '-pix_fmt', 'yuv420p', 'twitter_feed_'+username+'_'+today+'.mp4'])
-    print("\nDone processing " + username + " video!")
+    subprocess.call(['./ffmpeg/bin/ffmpeg', '-y', '-r', '1/3', '-i', './processed_imgs/'+username+'%d.png',
+                     '-pix_fmt', 'yuv420p', '-r', '25', '-loglevel', 'error', '-hide_banner',
+                     'twitter_feed_'+username+'_'+today+'.mp4'], stdout=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
+    print("Done with "+ username + " video!")
+    print("Twitter id? ", end='')
 
 
 def cli(q, q2):
@@ -86,7 +90,10 @@ def cli(q, q2):
         # Remove old pictures with matching Twitter ID
         filelist = glob.glob(os.path.join(r'processed_imgs/', id + "*.png"))
         for f in filelist:
-            os.remove(f)
+            try:
+                os.remove(f)
+            except:
+                print("No files")
         # Create processes to start generating pictures
         q_item = [id, twit.get_user_pic(id), twit.get_users_tweets(id)]
         t = threading.Thread(name="ProducerThread", target=producer, args=(q, q_item))
@@ -105,7 +112,7 @@ if __name__ == '__main__':
     # 4 threads to do processes running at .001 seconds
     threads_num = 4
     for i in range(threads_num):
-        t = threading.Thread(name="Thread Processor-" + str(i), target=processor, args=(q, q2,))
+        t = threading.Thread(name="Thread Processor-" + str(i), target=processor, args=(q,))
         t.start()
 
     # FFMPEG thread

@@ -10,7 +10,7 @@
 <meta name="description" content="FFmpeg Bitstream Filters Documentation: ">
 <meta name="keywords" content="FFmpeg documentation : FFmpeg Bitstream Filters ">
 <meta name="Generator" content="texi2html 5.0">
-<!-- Created on February 10, 2020 by texi2html 5.0 -->
+<!-- Created on January 26, 2020 by texi2html 5.0 -->
 <!--
 texi2html was written by: 
             Lionel Cons <Lionel.Cons@cern.ch> (original author)
@@ -345,11 +345,6 @@ removed.
 </dd>
 <dt>&lsquo;<samp>sample_aspect_ratio</samp>&rsquo;</dt>
 <dd><p>Set the sample aspect ratio of the stream in the VUI parameters.
-</p>
-</dd>
-<dt>&lsquo;<samp>overscan_appropriate_flag</samp>&rsquo;</dt>
-<dd><p>Set whether the stream is suitable for display using overscan
-or not (see H.264 section E.2.1).
 </p>
 </dd>
 <dt>&lsquo;<samp>video_format</samp>&rsquo;</dt>
@@ -769,7 +764,7 @@ Available values are:
 </p>
 <dl compact="compact">
 <dt>&lsquo;<samp>auto</samp>&rsquo;</dt>
-<dd><p>Keep the same colorspace property (default).
+<dd><p>Keep the same transfer characteristics property (default).
 </p>
 </dd>
 <dt>&lsquo;<samp>unknown</samp>&rsquo;</dt>
@@ -846,9 +841,7 @@ on the build only a subset of these may be available.
 </p>
 <dl compact="compact">
 <dt>&lsquo;<samp>color_space</samp>&rsquo;</dt>
-<dd><p>Set the color space value in the frame header.  Note that any frame
-set to RGB will be implicitly set to PC range and that RGB is
-incompatible with profiles 0 and 2.
+<dd><p>Set the color space value in the frame header.
 </p><dl compact="compact">
 <dt>&lsquo;<samp>unknown</samp>&rsquo;</dt>
 <dt>&lsquo;<samp>bt601</samp>&rsquo;</dt>
@@ -861,8 +854,8 @@ incompatible with profiles 0 and 2.
 
 </dd>
 <dt>&lsquo;<samp>color_range</samp>&rsquo;</dt>
-<dd><p>Set the color range value in the frame header.  Note that any value
-imposed by the color space will take precedence over this value.
+<dd><p>Set the color range value in the frame header.  Note that this cannot
+be set in RGB streams.
 </p><dl compact="compact">
 <dt>&lsquo;<samp>tv</samp>&rsquo;</dt>
 <dt>&lsquo;<samp>pc</samp>&rsquo;</dt>

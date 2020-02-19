@@ -10,7 +10,7 @@
 <meta name="description" content="ffmpeg Documentation: ">
 <meta name="keywords" content="FFmpeg documentation : ffmpeg ">
 <meta name="Generator" content="texi2html 5.0">
-<!-- Created on February 10, 2020 by texi2html 5.0 -->
+<!-- Created on January 26, 2020 by texi2html 5.0 -->
 <!--
 texi2html was written by: 
             Lionel Cons <Lionel.Cons@cern.ch> (original author)
@@ -56,7 +56,7 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
       <li><a name="toc-Complex-filtergraphs-1" href="#Complex-filtergraphs-1">4.1.3 Complex filtergraphs</a></li>
       <li><a name="toc-Stream-handling" href="#Stream-handling">4.1.4 Stream handling</a></li>
     </ul></li>
-    <li><a name="toc-Examples" href="#Examples">4.2 Examples</a></li>
+    <li><a name="toc-Examples-1" href="#Examples-1">4.2 Examples</a></li>
   </ul></li>
   <li><a name="toc-Options" href="#Options">5 Options</a>
   <ul class="no-bullet">
@@ -78,7 +78,7 @@ Send bugs and suggestions to <texi2html-bug@nongnu.org>
     </ul>
 </li>
   </ul></li>
-  <li><a name="toc-Examples-1" href="#Examples-1">6 Examples</a>
+  <li><a name="toc-Examples" href="#Examples">6 Examples</a>
   <ul class="no-bullet">
     <li><a name="toc-Video-and-Audio-grabbing" href="#Video-and-Audio-grabbing">6.1 Video and Audio grabbing</a></li>
     <li><a name="toc-X11-grabbing" href="#X11-grabbing">6.2 X11 grabbing</a></li>
@@ -363,8 +363,8 @@ within the output format. This applies generally as well: when the user sets an 
 the stream selection process cannot check if the encoded stream can be muxed into the output file.
 If it cannot, ffmpeg will abort and <em>all</em> output files will fail to be processed.
 </p>
-<a name="Examples"></a>
-<h2 class="section"><a href="ffmpeg.html#toc-Examples">4.2 Examples</a></h2>
+<a name="Examples-1"></a>
+<h2 class="section"><a href="ffmpeg.html#toc-Examples-1">4.2 Examples</a></h2>
 
 <p>The following examples illustrate the behavior, quirks and limitations of ffmpeg&rsquo;s stream
 selection methods.
@@ -787,12 +787,14 @@ state of <code>level</code> prefix flag or <var>loglevel</var>:
 <p>By default the program logs to stderr. If coloring is supported by the
 terminal, colors are used to mark errors and warnings. Log coloring
 can be disabled setting the environment variable
-<code>AV_LOG_FORCE_NOCOLOR</code>, or can be forced setting
+<code>AV_LOG_FORCE_NOCOLOR</code> or <code>NO_COLOR</code>, or can be forced setting
 the environment variable <code>AV_LOG_FORCE_COLOR</code>.
+The use of the environment variable <code>NO_COLOR</code> is deprecated and
+will be dropped in a future FFmpeg version.
 </p>
 </dd>
 <dt>&lsquo;<samp>-report</samp>&rsquo;</dt>
-<dd><p>Dump full command line and log output to a file named
+<dd><p>Dump full command line and console output to a file named
 <code><var>program</var>-<var>YYYYMMDD</var>-<var>HHMMSS</var>.log</code> in the current
 directory.
 This file can be useful for bug reports.
@@ -1462,18 +1464,12 @@ The alternative is to deinterlace the input stream with
 </dd>
 <dt>&lsquo;<samp>-force_key_frames[:<var>stream_specifier</var>] <var>time</var>[,<var>time</var>...] (<em>output,per-stream</em>)</samp>&rsquo;</dt>
 <dt>&lsquo;<samp>-force_key_frames[:<var>stream_specifier</var>] expr:<var>expr</var> (<em>output,per-stream</em>)</samp>&rsquo;</dt>
-<dt>&lsquo;<samp>-force_key_frames[:<var>stream_specifier</var>] source (<em>output,per-stream</em>)</samp>&rsquo;</dt>
-<dd>
-<p><var>force_key_frames</var> can take arguments of the following form:
+<dd><p>Force key frames at the specified timestamps, more precisely at the first
+frames after each specified time.
 </p>
-<dl compact="compact">
-<dt>&lsquo;<samp><var>time</var>[,<var>time</var>...]</samp>&rsquo;</dt>
-<dd><p>If the argument consists of timestamps, ffmpeg will round the specified times to the nearest
-output timestamp as per the encoder time base and force a keyframe at the first frame having
-timestamp equal or greater than the computed timestamp. Note that if the encoder time base is too
-coarse, then the keyframes may be forced on frames with timestamps lower than the specified time.
-The default encoder time base is the inverse of the output framerate but may be set otherwise
-via <code>-enc_time_base</code>.
+<p>If the argument is prefixed with <code>expr:</code>, the string <var>expr</var>
+is interpreted like an expression and is evaluated for each frame. A
+key frame is forced in case the evaluation is non-zero.
 </p>
 <p>If one of the times is &quot;<code>chapters</code>[<var>delta</var>]&quot;, it is expanded into
 the time of the beginning of all chapters in the file, shifted by
@@ -1487,12 +1483,6 @@ before the beginning of every chapter:
 <pre class="example">-force_key_frames 0:05:00,chapters-0.1
 </pre></div>
 
-</dd>
-<dt>&lsquo;<samp>expr:<var>expr</var></samp>&rsquo;</dt>
-<dd><p>If the argument is prefixed with <code>expr:</code>, the string <var>expr</var>
-is interpreted like an expression and is evaluated for each frame. A
-key frame is forced in case the evaluation is non-zero.
-</p>
 <p>The expression in <var>expr</var> can contain the following constants:
 </p><dl compact="compact">
 <dt>&lsquo;<samp>n</samp>&rsquo;</dt>
@@ -1524,14 +1514,6 @@ starting from second 13:
 </p><div class="example">
 <pre class="example">-force_key_frames expr:if(isnan(prev_forced_t),gte(t,13),gte(t,prev_forced_t+5))
 </pre></div>
-
-</dd>
-<dt>&lsquo;<samp>source</samp>&rsquo;</dt>
-<dd><p>If the argument is <code>source</code>, ffmpeg will force a key frame if
-the current frame being encoded is marked as a key frame in its source.
-</p>
-</dd>
-</dl>
 
 <p>Note that forcing too many keyframes is very harmful for the lookahead
 algorithms of certain encoders: using fixed-GOP options or similar
@@ -1625,23 +1607,6 @@ devices matching particular platform or device strings.
 <dt><em>-init_hw_device opencl:1,device_type=gpu,device_extensions=cl_khr_fp16</em></dt>
 <dd><p>Choose the GPU device on the second platform supporting the <em>cl_khr_fp16</em>
 extension.
-</p></dd>
-</dl>
-
-</dd>
-<dt>&lsquo;<samp>vulkan</samp>&rsquo;</dt>
-<dd><p>If <var>device</var> is an integer, it selects the device by its index in a
-system-dependent list of devices.  If <var>device</var> is any other string, it
-selects the first device with a name containing that string as a substring.
-</p>
-<p>Examples:
-</p><dl compact="compact">
-<dt><em>-init_hw_device vulkan:1</em></dt>
-<dd><p>Choose the second device on the system.
-</p>
-</dd>
-<dt><em>-init_hw_device vulkan:RADV</em></dt>
-<dd><p>Choose the first device with a name containing the string <em>RADV</em>.
 </p></dd>
 </dl>
 
@@ -2063,7 +2028,7 @@ it will usually display as 0 if not supported.
 Shows real, system and user time used in various steps (audio/video encode/decode).
 </p></dd>
 <dt>&lsquo;<samp>-timelimit <var>duration</var> (<em>global</em>)</samp>&rsquo;</dt>
-<dd><p>Exit after ffmpeg has been running for <var>duration</var> seconds in CPU user time.
+<dd><p>Exit after ffmpeg has been running for <var>duration</var> seconds.
 </p></dd>
 <dt>&lsquo;<samp>-dump (<em>global</em>)</samp>&rsquo;</dt>
 <dd><p>Dump each input packet to stderr.
@@ -2219,11 +2184,6 @@ or as a floating point number (e.g. 0.04166, 2.0833e-5)
 </p></dd>
 <dt>&lsquo;<samp>-dts_delta_threshold</samp>&rsquo;</dt>
 <dd><p>Timestamp discontinuity delta threshold.
-</p></dd>
-<dt>&lsquo;<samp>-dts_error_threshold <var>seconds</var></samp>&rsquo;</dt>
-<dd><p>Timestamp error delta threshold. This threshold use to discard crazy/damaged
-timestamps and the default is 30 hours which is arbitrarily picked and quite
-conservative.
 </p></dd>
 <dt>&lsquo;<samp>-muxdelay <var>seconds</var> (<em>output</em>)</samp>&rsquo;</dt>
 <dd><p>Set the maximum demux-decode delay.
@@ -2496,8 +2456,8 @@ search for the file &lsquo;<tt>libvpx-1080p.avpreset</tt>&rsquo;.
 <var>arg</var>.avpreset in the same directories.
 </p>
 
-<a name="Examples-1"></a>
-<h1 class="chapter"><a href="ffmpeg.html#toc-Examples-1">6 Examples</a></h1>
+<a name="Examples"></a>
+<h1 class="chapter"><a href="ffmpeg.html#toc-Examples">6 Examples</a></h1>
 
 <a name="Video-and-Audio-grabbing"></a>
 <h2 class="section"><a href="ffmpeg.html#toc-Video-and-Audio-grabbing">6.1 Video and Audio grabbing</a></h2>
