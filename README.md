@@ -46,4 +46,4 @@ The bottleneck for the program is actually the image processing side. While the 
 
 <img src="https://github.com/BUEC500C1/video-djtrinh/blob/master/cpu_usage.PNG?raw=true">
 
-The next steps for this project is to have a way to schedule multiple Twitter usernames and multi-processes to really see the CPU chug and get bogged down. Also, a web interface of some sort can be utilized for a much better user experience. There are also some corner cases that still need to be taken care of. For example, some Twitter users can have their account suspended affecting Tweet grabs.
+The application will alert the user when the video has been done processing specifying which video has completed. The user has the ability to schedule multiple Twitter videos which is still being processed by the 4 threads. However, subsequent FFMPEG calls are new processes. The next steps for this project is to have a web interface of some sort can be utilized for a much better user experience. There are also some corner cases that may need to be taken care of. However, as of currently, there are no inputs that could crash the application.
