@@ -30,6 +30,6 @@ jobs:
     - name: Test with pytest
       run: |
         pip install pytest
-        #pytest twitter_api_test.py
+        #pytest test_twitter_api.py #this test needs to be run manually because of keys
         chmod +x ./ffmpeg/bin/ffmpeg.exe
-        pytest main_test.py
+        pytest test_media_creator.py
