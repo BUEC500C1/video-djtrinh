@@ -32,4 +32,5 @@ jobs:
         pip install pytest
         #pytest test_twitter_api.py #this test needs to be run manually because of keys
         chmod +x ./ffmpeg/bin/ffmpeg.exe
+        chmod 777 ./processed_imgs
         pytest test_media_creator.py
