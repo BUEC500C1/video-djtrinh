@@ -1,5 +1,5 @@
 import media_creator as mc
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
 
 
 def test_create(capsys):
