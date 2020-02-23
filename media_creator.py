@@ -65,6 +65,10 @@ class media_creator():
                            'twitter_feed_' + username + '_' + today + '.mp4'], stdout=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
             print("Done with " + username + " video! File at "+ os.getcwd() + r'\twitter_feed_' + username + '_' + today + '.mp4')
             print("Twitter id? ", end='')
+            today = str(datetime.datetime.now())
+            log = open("log_file.txt", 'a')
+            log.write(today + ": " + "Finished with video processing of " + username + "\n")
+            log.close()
         except Exception as e:
             print("FFMPEG subprcess call had an issue. Most likely had bad tweets from Twitter")
             print(e)

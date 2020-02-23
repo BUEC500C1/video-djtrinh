@@ -6,6 +6,7 @@ import glob
 import os
 import os.path
 import media_creator
+import datetime
 
 
 # Thread that processes create image requests. 4 of these are run
@@ -15,6 +16,10 @@ def processor(q, mc):
         # Do not create image item grabbed is blank
         if item is not None:
             mc.create_images(item[0], item[1], item[2], item[3])
+            today = str(datetime.datetime.now())
+            log = open("log_file.txt", 'a')
+            log.write(today + ": " + str(item[0]) + " image processing in progress...\n")
+            log.close()
         q.task_done()
         time.sleep(.001)
 
@@ -26,9 +31,14 @@ def ffpmeg_processor(q2, mc):
         # Do not check for images if username is blank
         if username is not None:
             png_count = len(glob.glob1(r"processed_imgs/", username + r"*.png"))
+            today = str(datetime.datetime.now())
+
             if png_count < 20:
                 q2.put(username)
             else:
+                log = open("log_file.txt", 'a')
+                log.write(today + ": " + username + " video processing in progress...\n")
+                log.close()
                 mc.ffmpeg_call(username)
         q2.task_done()
         time.sleep(.001)
