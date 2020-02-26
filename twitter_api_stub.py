@@ -10,7 +10,7 @@ class twitter_api_stub():
 
     def get_user_pic(self, username):
         if username == "Google":
-            return self.j["profile_image_url"]
+            return self.j['user']['profile_image_url_https']
         else:
             print("400", file=sys.stderr)
             return ""
