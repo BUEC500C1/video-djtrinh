@@ -64,7 +64,7 @@ class media_creator():
                            '-pix_fmt', 'yuv420p', '-r', '25', '-loglevel', 'error', '-hide_banner',
                            'twitter_feed_' + username + '_' + today + '.mp4'], stdout=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
             print("Done with " + username + " video! File at "+ os.getcwd() + r'\twitter_feed_' + username + '_' + today + '.mp4')
-            print("Twitter id? ", end='')
+            print("Twitter id? (x to exit) ", end='')
             today = str(datetime.datetime.now())
             log = open("log_file.txt", 'a')
             log.write(today + ": " + "Finished with video processing of " + username + "\n")

@@ -7,6 +7,7 @@ import os
 import os.path
 import media_creator
 import datetime
+import sys
 
 
 # Thread that processes create image requests. 4 of these are run
@@ -55,8 +56,10 @@ def producer(q, q_item):
 # Command line interface
 def cli(q1, q2):
     while(True):
-        id = input("Twitter id? ")
-        if id != '':
+        id = input("Twitter id? (x to exit) ")
+        if id.lower() == 'x':
+            sys.exit();
+        elif id != '':
             # Remove old pictures with matching Twitter ID
             filelist = glob.glob(os.path.join(r'processed_imgs/', id + "*.png"))
             if len(filelist) > 0:
