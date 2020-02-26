@@ -34,3 +34,4 @@ jobs:
         chmod +x ./ffmpeg/bin/ffmpeg.exe
         chmod 777 ./processed_imgs
         pytest test_media_creator.py
+        pytest test_twitter_api.py
