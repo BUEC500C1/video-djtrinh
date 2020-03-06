@@ -63,12 +63,12 @@ class media_creator():
             if(os.name == 'nt'):
                 subprocess.call(['./ffmpeg/bin/ffmpeg', '-y', '-r', '1/3', '-i', './processed_imgs/'+username+'%d.png',
                            '-pix_fmt', 'yuv420p', '-r', '25', '-loglevel', 'error', '-hide_banner',
-                           r'twitter_feed_' + username + '_' + date_time + '.mp4'], stdout=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
+                           r'twitter_feed_' + username + '_' + today + '.mp4'], stdout=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
             else:
                 subprocess.call(
                     ['./ffmpeg/ffmpeg', '-y', '-r', '1/3', '-i', './processed_imgs/' + username + '%d.png',
                      '-pix_fmt', 'yuv420p', '-r', '25', '-loglevel', 'error', '-hide_banner',
-                     r'twitter_feed_' + username + '_' + date_time + '.mp4'], stdout=subprocess.DEVNULL,
+                     r'twitter_feed_' + username + '_' + today + '.mp4'], stdout=subprocess.DEVNULL,
                     stdin=subprocess.DEVNULL)
             print("Done with " + username + " video! File at "+ os.getcwd() + r'\twitter_feed_' + username + '_' + today + '.mp4')
             print("Twitter id? (x to exit) ", end='')
