@@ -23,7 +23,7 @@ class media_creator():
                 print("Invalid username or tweet grab was corrupted\n")
                 return
         background = Image.new('RGBA', (1024, 768), (255, 255, 255, 255))
-        font = ImageFont.truetype(r'font/Arial.ttf', 14)
+        font = ImageFont.truetype(r'font/arial.ttf', 14)
         # fetch user profile pic
         response = requests.get(user_img_url)
         img = Image.open(BytesIO(response.content))
@@ -60,9 +60,16 @@ class media_creator():
         # Cat date with our file name
         today = str(datetime.date.today()).replace('-', '_')
         try:
-            subprocess.call(['./ffmpeg/bin/ffmpeg', '-y', '-r', '1/3', '-i', './processed_imgs/'+username+'%d.png',
+            if(os.name == 'nt'):
+                subprocess.call(['./ffmpeg/bin/ffmpeg', '-y', '-r', '1/3', '-i', './processed_imgs/'+username+'%d.png',
                            '-pix_fmt', 'yuv420p', '-r', '25', '-loglevel', 'error', '-hide_banner',
-                           'twitter_feed_' + username + '_' + today + '.mp4'], stdout=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
+                           r'twitter_feed_' + username + '_' + date_time + '.mp4'], stdout=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
+            else:
+                subprocess.call(
+                    ['./ffmpeg/ffmpeg', '-y', '-r', '1/3', '-i', './processed_imgs/' + username + '%d.png',
+                     '-pix_fmt', 'yuv420p', '-r', '25', '-loglevel', 'error', '-hide_banner',
+                     r'twitter_feed_' + username + '_' + date_time + '.mp4'], stdout=subprocess.DEVNULL,
+                    stdin=subprocess.DEVNULL)
             print("Done with " + username + " video! File at "+ os.getcwd() + r'\twitter_feed_' + username + '_' + today + '.mp4')
             print("Twitter id? (x to exit) ", end='')
             today = str(datetime.datetime.now())
