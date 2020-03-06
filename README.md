@@ -22,8 +22,6 @@ ffmpeg.exe -i test.mp4 -c:a copy -c:v copy -r 30 -s hd480 -b:v 1M output.mp4
 Each of the commands on a 3 minute test video finished in < 1 seconds. Because of this, we will be running the program with 4 threads which is overkill.
 
 ### How to Run?
-This runs only on windows at the moment! The reason being, the FFMPEG calls are subprocess calls to a Windows executable.
-
 This application requires primarily Tweepy, Python 3, and other packages specified in the requirements.txt file.
 
 Please make sure all APIs have been installed before running the program. To run the program, run python main.py. 
