@@ -43,7 +43,7 @@ def ffpmeg_processor(q2, mc):
                 mc.ffmpeg_call(username)
         q2.task_done()
         time.sleep(.001)
-
+        
 
 # thread function that puts creation of image task to the queue
 def producer(q, q_item):
@@ -58,7 +58,7 @@ def cli(q1, q2):
     while(True):
         id = input("Twitter id? (x to exit) ")
         if id.lower() == 'x':
-            sys.exit();
+            break
         elif id != '':
             # Remove old pictures with matching Twitter ID
             filelist = glob.glob(os.path.join(r'processed_imgs/', id + "*.png"))
@@ -72,6 +72,7 @@ def cli(q1, q2):
             t.start()
         else:
             print("Please enter a valid ID\n")
+
 
 
 if __name__ == '__main__':
@@ -88,12 +89,12 @@ if __name__ == '__main__':
     # 4 threads to do processes running at .001 seconds . This will create the images
     threads_num = 4
     for i in range(threads_num):
-        t = threading.Thread(name="Thread Processor-" + str(i), target=processor, args=(q1, mc,))
+        t = threading.Thread(name="Thread Processor-" + str(i), target=processor, args=(q1, mc,), daemon = True)
         t.start()
 
     # FFMPEG thread
     # Checks if images are there and creates the mp4 file if the criteria is met
-    t = threading.Thread(name="FFMPEG Processor", target=ffpmeg_processor, args=(q2, mc,))
+    t = threading.Thread(name="FFMPEG Processor", target=ffpmeg_processor, args=(q2, mc,), daemon = True)
     t.start()
 
     # CLI thread
